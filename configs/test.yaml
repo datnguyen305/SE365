@@ -27,4 +27,4 @@ train:
   ckpt_path: checkpoints/model.ckpt
   type: baseline
 
-device: cpu
+device: cuda
