@@ -24,7 +24,7 @@ train:
   epochs: 1
   learning_rate: 0.001
   optimizer: Adam
-  ckpt_path: checkpoints
+  ckpt_path: checkpoints/model.pth
   type: baseline
 
-device: cuda
+device: cpu

@@ -10,7 +10,7 @@ import csv
 from tqdm import tqdm
 
 def train(config):
-    ckpt_dir = config.train.ckpt_path
+    ckpt_dir = os.path.dirname(config.train.ckpt_path)
     os.makedirs(ckpt_dir, exist_ok=True)
     train_dataset = CatDogDataset(config.dataset, splits="train")
     dev_dataset = CatDogDataset(config.dataset, splits="dev")

@@ -10,7 +10,7 @@ config_file = args.config_file
 
 if __name__ == "__main__":
     config = get_config(config_file)
-    Preprocessor(config.dataset).run()
+    # Preprocessor(config.dataset).run()
     train(config)
     test(config)
 
