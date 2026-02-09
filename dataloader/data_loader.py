@@ -14,6 +14,7 @@ class CatDogDataset(Dataset):
         self.root_dir = os.path.join(config.tgt_dir, splits)
         self.samples = []
         self.config = config
+        self.splits = splits
 
         self.classes = sorted(
             d for d in os.listdir(self.root_dir)
@@ -45,7 +46,7 @@ class CatDogDataset(Dataset):
         image = image.astype(np.float32) / 255.0
 
         # ===== Data Augmentation (Exp-3) =====
-        if self.config.split == "train" and self.config.train.aug:
+        if self.splits == "train" and self.config.train.aug:
             image = random_crop(image, crop_ratio=0.9)
             image = cv2.resize(image, (self.config.width, self.config.height))
 
