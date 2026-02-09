@@ -1,0 +1,30 @@
+dataset: 
+  seed: 42
+  src_dir: data\raw
+  tgt_dir: data\preprocessed
+  train: 0.8
+  dev: 0.1
+  test: 0.1
+  height: 128
+  width: 128
+  train_dir: data\preprocessed\train
+  dev_dir: data\preprocessed\dev
+  test_dir: data\preprocessed\test
+  
+model: 
+  height: 128
+  width: 128
+  channels: 3
+  num_classes: 2
+  hidden_size: 256
+  dropout: 0.5
+
+train:
+  batch_size: 16
+  epochs: 1
+  learning_rate: 0.001
+  optimizer: Adam
+  ckpt_path: checkpoints/model.ckpt
+  type: baseline
+
+device: cpu

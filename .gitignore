@@ -1,0 +1,7 @@
+__pycache__/
+kagglecatsanddogs_5340/
+data/
+checkpoints/
+.vscode/
+venv/
+kagglecatsanddogs_5340.zip

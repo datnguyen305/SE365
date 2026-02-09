@@ -1,0 +1,148 @@
+from dataloader import CatDogDataset
+from evaluate import Evaluator
+from models import NeuralNetwork
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+import os
+import csv
+from tqdm import tqdm
+
+def train(config):
+    ckpt_dir = os.path.dirname(config.train.ckpt_path)
+    os.makedirs(ckpt_dir, exist_ok=True)
+    train_dataset = CatDogDataset(config.dataset, splits="train")
+    dev_dataset = CatDogDataset(config.dataset, splits="dev")
+
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=config.train.batch_size,
+        shuffle=True
+    )
+    dev_loader = DataLoader(
+        dev_dataset,
+        batch_size=config.train.batch_size,
+        shuffle=False
+    )
+
+    model = NeuralNetwork(config.model).to(config.device)
+    loss_fn = nn.CrossEntropyLoss()
+
+    if config.train.optimizer == "Adam":
+        optimizer = optim.Adam(
+            model.parameters(),
+            lr=config.train.learning_rate
+        )
+    
+    if config.train.optimizer == "SGD":
+        optimizer = optim.SGD(
+            model.parameters(),
+            lr=config.train.learning_rate,
+            momentum=0.9
+        )
+
+    evaluator = Evaluator(model, loss_fn, device=config.device)
+
+    best_dev_f1 = 0.0
+    result_per_epoch = []
+
+    for epoch in range(config.train.epochs):
+        model.train()
+        total_loss = 0.0
+
+        pbar = tqdm(
+            train_loader,
+            desc=f"Epoch [{epoch+1}/{config.train.epochs}]",
+            leave=False
+        )
+
+        for batch in pbar:
+            x = batch["image"].to(config.device)
+            target = batch["label"].to(config.device)
+
+            optimizer.zero_grad()
+            logits = model(x)
+            loss = loss_fn(logits, target)
+            loss.backward()
+            optimizer.step()
+
+            batch_size = x.size(0)
+            total_loss += loss.item() * batch_size
+
+            # update progress bar
+            pbar.set_postfix(loss=loss.item())
+
+        avg_train_loss = total_loss / len(train_loader.dataset)
+        dev_metrics = evaluator.evaluate(dev_loader)
+
+        if dev_metrics["f1"] > best_dev_f1:
+            best_dev_f1 = dev_metrics["f1"]
+            torch.save(model.state_dict(), config.train.ckpt_path)
+
+        print(f"Epoch {epoch+1}/{config.train.epochs}, Dev Accuracy: {dev_metrics['accuracy']:.4f}, Dev F1: {dev_metrics['f1']:.4f}")
+        
+        result_per_epoch.append({
+            "epoch": epoch + 1,
+            "train_loss": avg_train_loss,
+            "dev_loss": dev_metrics["loss"],
+            "dev_accuracy": dev_metrics["accuracy"]
+        })
+
+    csv_path = f"{ckpt_dir}/training_log_{config.train.type}.csv"
+    file_exists = os.path.exists(csv_path)
+
+    with open(csv_path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["epoch", "train_loss", "dev_loss", "dev_accuracy"]
+        )
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(result_per_epoch[-1])
+
+def test(config):
+    ckpt_dir = os.path.dirname(config.train.ckpt_path)
+    final_results = []
+    test_dataset = CatDogDataset(config.dataset, splits="test")
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=config.train.batch_size,
+        shuffle=False
+    )
+
+    model = NeuralNetwork(config.model).to(config.device)
+    model.load_state_dict(torch.load(config.train.ckpt_path))
+
+    loss_fn = nn.CrossEntropyLoss()
+    evaluator = Evaluator(model, loss_fn, device=config.device)
+
+    test_metrics = evaluator.evaluate(
+        tqdm(test_loader, desc="Testing")
+    )
+
+    print(
+        f"Test Loss: {test_metrics['loss']:.4f} | "
+        f"Test Acc: {test_metrics['accuracy']:.4f} | "
+        f"Test F1: {test_metrics['f1']:.4f}"
+    )
+    final_results.append({
+        "accuracy": test_metrics["accuracy"],
+        "precision": test_metrics["precision"],
+        "recall": test_metrics["recall"],
+        "test_f1": test_metrics["f1"]
+    })
+
+    csv_path = f"{ckpt_dir}/final_result_{config.train.type}.csv"
+    file_exists = os.path.exists(csv_path)
+
+    with open(csv_path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["accuracy", "precision", "recall", "test_f1"]
+        )
+
+        if not file_exists:
+            writer.writeheader()
+
+        writer.writerow(final_results[-1])
