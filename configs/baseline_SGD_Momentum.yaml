@@ -24,8 +24,8 @@ train:
   batch_size: 128
   epochs: 10
   learning_rate: 0.001
-  optimizer: Adam
+  optimizer: SGD
   ckpt_path: checkpoints/model.pth
   type: baseline
 
-device: gpu
+device: cuda

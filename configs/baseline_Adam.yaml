@@ -28,4 +28,4 @@ train:
   ckpt_path: checkpoints/model.pth
   type: baseline
 
-device: gpu
+device: cuda
