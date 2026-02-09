@@ -46,8 +46,10 @@ def train(config):
 
     evaluator = Evaluator(model, loss_fn, device=config.device)
 
-    best_dev_f1 = -1.0
+    best_dev_loss = -1.0
     result_per_epoch = []
+    patience = config.train.patience   # ví dụ: 3
+    counter = 0
 
     for epoch in range(config.train.epochs):
         model.train()
@@ -78,12 +80,19 @@ def train(config):
         avg_train_loss = total_loss / len(train_loader.dataset)
         dev_metrics = evaluator.evaluate(dev_loader)
 
-        if dev_metrics["f1"] > best_dev_f1:
-            best_dev_f1 = dev_metrics["f1"]
+        if dev_metrics["loss"] > best_dev_loss:
+            best_dev_loss = dev_metrics["loss"]
+            counter = 0
             torch.save(model.state_dict(), config.train.ckpt_path)
+        else:
+            counter += 1
 
         print(f"Epoch {epoch+1}/{config.train.epochs}, Dev Accuracy: {dev_metrics['accuracy']:.4f}, Dev F1: {dev_metrics['f1']:.4f}")
         
+        if counter >= patience:
+            print(f"Early stopping at epoch {epoch+1}")
+            break
+
         result_per_epoch.append({
             "epoch": epoch + 1,
             "train_loss": avg_train_loss,

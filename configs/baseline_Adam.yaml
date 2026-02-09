@@ -26,6 +26,9 @@ train:
   learning_rate: 0.001
   optimizer: Adam
   ckpt_path: checkpoints/model.pth
-  type: baseline
+  type: baseline_Adam
+  weight_decay: 0
+  aug: False
+  early_stopping: True
 
 device: cuda

@@ -18,16 +18,17 @@ model:
   channels: 3
   num_classes: 2
   hidden_size: 256
-  dropout: 0.5
+  dropout: 0
 
 train:
   batch_size: 128
   epochs: 10
   learning_rate: 0.001
-  optimizer: SGD
+  optimizer: Adam
   ckpt_path: checkpoints/model.pth
-  type: baseline_SGD_Momentum
-  weight_decay: 0
-  aug: Fasle
-  early_stopping: True
+  type: baseline_Adam
+  weight_decay: 1e-3
+  aug: False
+  patience: 0
+
 device: cuda
