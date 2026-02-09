@@ -1,5 +1,6 @@
 seed: 42
 dataset: 
+  seed: 42
   src_dir: /kaggle/input/dogcatdataset/kagglecatsanddogs_5340/PetImages
   tgt_dir: data/preprocessed
   train: 0.8
