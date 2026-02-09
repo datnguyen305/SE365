@@ -21,11 +21,11 @@ model:
   dropout: 0.5
 
 train:
-  batch_size: 64
-  epochs: 1
+  batch_size: 128
+  epochs: 10
   learning_rate: 0.001
   optimizer: Adam
   ckpt_path: checkpoints/model.pth
   type: baseline
 
-device: cpu
+device: gpu
