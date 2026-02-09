@@ -44,7 +44,7 @@ def train(config):
 
     evaluator = Evaluator(model, loss_fn, device=config.device)
 
-    best_dev_f1 = 0.0
+    best_dev_f1 = -1.0
     result_per_epoch = []
 
     for epoch in range(config.train.epochs):
