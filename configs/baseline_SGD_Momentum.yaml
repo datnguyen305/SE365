@@ -28,6 +28,6 @@ train:
   ckpt_path: checkpoints/model.pth
   type: baseline_SGD_Momentum
   weight_decay: 0
-  aug: Fasle
-  early_stopping: True
+  aug: False
+  patience: 0
 device: cuda

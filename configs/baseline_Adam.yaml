@@ -29,6 +29,6 @@ train:
   type: baseline_Adam
   weight_decay: 0
   aug: False
-  early_stopping: True
+  patience: 0
 
 device: cuda
