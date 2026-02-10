@@ -11,6 +11,7 @@ dataset:
   train_dir: data/preprocessed/train
   dev_dir: data/preprocessed/dev
   test_dir: data/preprocessed/test
+  aug: False
   
 model: 
   height: 128

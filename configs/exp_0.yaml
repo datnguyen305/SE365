@@ -29,7 +29,6 @@ train:
   ckpt_path: checkpoints/model_exp_0.pth
   type: baseline_Adam
   weight_decay: 0
-  
   patience: 3
 
 device: cuda
