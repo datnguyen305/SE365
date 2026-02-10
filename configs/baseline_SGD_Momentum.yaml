@@ -29,5 +29,5 @@ train:
   ckpt_path: checkpoints/model_SGD_Momentum.pth
   type: baseline_SGD_Momentum
   weight_decay: 0
-  patience: 0
+  patience: 3
 device: cuda

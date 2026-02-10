@@ -30,6 +30,6 @@ train:
   type: exp_1
   weight_decay: 1e-3
   aug: False
-  patience: 0
+  patience: 3
 
 device: cuda
