@@ -16,7 +16,21 @@ class Preprocessor:
             "dev": self.dev,
             "test": self.test
         }
-    def run(self):
+
+    def is_already_preprocessed(self):
+        # Kiểm tra nếu thư mục đích tồn tại và không rỗng
+        if os.path.exists(self.tgt):
+            # Kiểm tra xem có bất kỳ thư mục split nào (train/dev/test) bên trong không
+            existing_splits = [s for s in self.splits.keys() if os.path.exists(os.path.join(self.tgt, s))]
+            if len(existing_splits) > 0:
+                return True
+        return False
+    
+    def run(self, force = False):
+        if self.is_already_preprocessed() and not force:
+            print(f"--- Dữ liệu đã tồn tại trong '{self.tgt}'. Bỏ qua bước tiền xử lý. ---")
+            return
+        
         random.seed(self.seed)
 
         splits = {
