@@ -25,7 +25,7 @@ train:
   epochs: 10
   learning_rate: 0.001
   optimizer: Adam
-  ckpt_path: checkpoints/model.pth
+  ckpt_path: checkpoints/model_exp_3.pth
   type: exp_3
   weight_decay: 1e-3
   aug: True
