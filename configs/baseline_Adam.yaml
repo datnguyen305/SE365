@@ -30,6 +30,6 @@ train:
   type: baseline_Adam
   weight_decay: 0
   aug: False
-  patience: 3
+  patience: 1
 
-device: cpu
+device: cuda
