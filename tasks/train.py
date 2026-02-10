@@ -46,7 +46,7 @@ def train(config):
 
     evaluator = Evaluator(model, loss_fn, device=config.device)
 
-    best_dev_loss = -1.0
+    best_dev_loss = float("inf")
     result_per_epoch = []
     patience = config.train.patience   # ví dụ: 3
     counter = 0
@@ -89,16 +89,18 @@ def train(config):
 
         print(f"Epoch {epoch+1}/{config.train.epochs}, Dev Accuracy: {dev_metrics['accuracy']:.4f}, Dev F1: {dev_metrics['f1']:.4f}")
         
-        if counter >= patience:
-            print(f"Early stopping at epoch {epoch+1}")
-            break
-
         result_per_epoch.append({
             "epoch": epoch + 1,
             "train_loss": avg_train_loss,
             "dev_loss": dev_metrics["loss"],
             "dev_accuracy": dev_metrics["accuracy"]
         })
+
+        if counter >= patience:
+            print(f"Early stopping at epoch {epoch+1}")
+            break
+
+        
 
     csv_path = f"{ckpt_dir}/training_log_{config.train.type}.csv"
     file_exists = os.path.exists(csv_path)
