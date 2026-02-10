@@ -117,7 +117,7 @@ def train(config):
         )
         if not file_exists:
             writer.writeheader()
-        writer.writerow(result_per_epoch[-1])
+        writer.writerow(result_per_epoch)
 
 def test(config):
     ckpt_dir = os.path.dirname(config.train.ckpt_path)
@@ -192,4 +192,4 @@ def test(config):
         if not file_exists:
             writer.writeheader()
 
-        writer.writerow(final_results[-1])
+        writer.writerow(final_results)

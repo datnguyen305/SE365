@@ -19,7 +19,7 @@ model:
   channels: 3
   num_classes: 2
   hidden_size: 256
-  dropout: 0
+  dropout: 0.5
 
 train:
   batch_size: 128
