@@ -117,7 +117,7 @@ def train(config):
         )
         if not file_exists:
             writer.writeheader()
-        writer.writerow(result_per_epoch)
+        writer.writerows(result_per_epoch)
 
 def test(config):
     ckpt_dir = os.path.dirname(config.train.ckpt_path)
@@ -176,20 +176,12 @@ def test(config):
     for key, value in final_results[-1].items():
         print(f" - {key}: {value:.4f}")
 
-    # Show confusion matrix
-    
 
-
-    csv_path = f"{ckpt_dir}/final_result_{config.train.type}.csv"
-    file_exists = os.path.exists(csv_path)
-
-    with open(csv_path, "a", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=["accuracy", "precision", "recall", "test_f1"]
-        )
-
+    # Lưu kết quả vào CSV
+    csv_res_path = f"{ckpt_dir}/final_result_{config.train.type}.csv"
+    file_exists = os.path.exists(csv_res_path)
+    with open(csv_res_path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["accuracy", "precision", "recall", "test_f1"])
         if not file_exists:
             writer.writeheader()
-
         writer.writerows(final_results)
