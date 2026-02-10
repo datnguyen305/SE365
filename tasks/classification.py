@@ -192,4 +192,4 @@ def test(config):
         if not file_exists:
             writer.writeheader()
 
-        writer.writerow(final_results)
+        writer.writerows(final_results)
