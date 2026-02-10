@@ -46,7 +46,7 @@ class CatDogDataset(Dataset):
         image = image.astype(np.float32) / 255.0
 
         # ===== Data Augmentation (Exp-3) =====
-        if self.splits == "train" and self.config.train.aug:
+        if self.splits == "train" and self.config.aug:
             image = random_crop(image, crop_ratio=0.9)
             image = cv2.resize(image, (self.config.width, self.config.height))
 
