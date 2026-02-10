@@ -8,6 +8,8 @@ from torch.utils.data import DataLoader
 import os
 import csv
 from tqdm import tqdm
+import numpy as np
+from visualize import plot_confusion_matrix, plot_learning_curves
 
 def train(config):
     ckpt_dir = os.path.dirname(config.train.ckpt_path)
@@ -135,6 +137,13 @@ def test(config):
         tqdm(test_loader, desc="Testing")
     )
 
+    y_pred = test_metrics["y_pred"]
+    y_true = test_metrics["y_true"]
+
+    np.save(f"{ckpt_dir}/y_pred_{config.train.type}.npy", y_pred)
+    np.save(f"{ckpt_dir}/y_true_{config.train.type}.npy", y_true)
+    print(f" -> Saved predictions and targets to {ckpt_dir}")
+
     print(
         f"Test Loss: {test_metrics['loss']:.4f} | "
         f"Test Acc: {test_metrics['accuracy']:.4f} | "
@@ -146,6 +155,24 @@ def test(config):
         "recall": test_metrics["recall"],
         "test_f1": test_metrics["f1"]
     })
+    # Vẽ và lưu confusion matrix
+    labels = test_dataset.classes  # ['Cat', 'Dog']
+    plot_confusion_matrix(
+        y_true,
+        y_pred,
+        labels,
+        save_path=f"{ckpt_dir}/confusion_matrix_{config.train.type}.png",
+        title="Confusion Matrix"
+    )
+    # Vẽ và lưu learning curves
+    plot_learning_curves(
+        csv_path=f"{ckpt_dir}/training_log_{config.train.type}.csv",
+        save_path=f"{ckpt_dir}/learning_curves_{config.train.type}.png"
+    )
+
+    print("Final Test Results:")
+    for key, value in final_results[-1].items():
+        print(f" - {key}: {value:.4f}")
 
     csv_path = f"{ckpt_dir}/final_result_{config.train.type}.csv"
     file_exists = os.path.exists(csv_path)

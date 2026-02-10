@@ -1,7 +1,7 @@
 seed: 42
 dataset: 
   seed: 42
-  src_dir: /kaggle/input/dogcatdataset/kagglecatsanddogs_5340/PetImages
+  src_dir: kagglecatsanddogs_5340/PetImages
   tgt_dir: data/preprocessed
   train: 0.8
   dev: 0.1
@@ -30,4 +30,4 @@ train:
   type: baseline_SGD_Momentum
   weight_decay: 0
   patience: 3
-device: cuda
+device: cpu
