@@ -41,7 +41,5 @@ def plot_confusion_matrix(y_true, y_pred, labels, save_path=None, title='Confusi
         print(f" -> Biểu đồ đã được lưu tại: {save_path}")
     
     plt.show()
-    plt.close()
 
 
-    

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-    
+
 def plot_learning_curves(csv_path, save_path=None):
     """
     Đọc file log CSV và vẽ biểu đồ Loss/Accuracy.
@@ -42,4 +42,3 @@ def plot_learning_curves(csv_path, save_path=None):
         print(f" -> Learning curves saved at: {save_path}")
     
     plt.show()
-    plt.close()

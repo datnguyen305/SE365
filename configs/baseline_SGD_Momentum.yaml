@@ -23,7 +23,7 @@ model:
 
 train:
   batch_size: 128
-  epochs: 10
+  epochs: 1
   learning_rate: 0.001
   optimizer: SGD
   ckpt_path: checkpoints/model_SGD_Momentum.pth

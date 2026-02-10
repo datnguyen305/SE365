@@ -7,11 +7,13 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 import os
 import csv
+import warnings
 from tqdm import tqdm
 import numpy as np
 from visualize import plot_confusion_matrix, plot_learning_curves
 
 def train(config):
+    warnings.filterwarnings("ignore")
     ckpt_dir = os.path.dirname(config.train.ckpt_path)
     os.makedirs(ckpt_dir, exist_ok=True)
     train_dataset = CatDogDataset(config.dataset, splits="train")
@@ -169,10 +171,14 @@ def test(config):
         csv_path=f"{ckpt_dir}/training_log_{config.train.type}.csv",
         save_path=f"{ckpt_dir}/learning_curves_{config.train.type}.png"
     )
-
+    # In ra kết quả cuối cùng
     print("Final Test Results:")
     for key, value in final_results[-1].items():
         print(f" - {key}: {value:.4f}")
+
+    # Show confusion matrix
+    
+
 
     csv_path = f"{ckpt_dir}/final_result_{config.train.type}.csv"
     file_exists = os.path.exists(csv_path)
