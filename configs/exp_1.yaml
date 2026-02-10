@@ -32,4 +32,4 @@ train:
   aug: False
   patience: 3
 
-device: cpu
+device: cuda
