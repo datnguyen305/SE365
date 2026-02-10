@@ -80,10 +80,11 @@ def train(config):
         avg_train_loss = total_loss / len(train_loader.dataset)
         dev_metrics = evaluator.evaluate(dev_loader)
 
-        if dev_metrics["loss"] > best_dev_loss:
+        if dev_metrics["loss"] < best_dev_loss:
             best_dev_loss = dev_metrics["loss"]
             counter = 0
             torch.save(model.state_dict(), config.train.ckpt_path)
+            print(f" -> Best model saved at epoch {epoch+1}")
         else:
             counter += 1
 
