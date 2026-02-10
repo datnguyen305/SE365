@@ -33,7 +33,7 @@ def train(config):
         optimizer = optim.Adam(
             model.parameters(),
             lr=config.train.learning_rate,
-            weight_decay=config.train.weight_decay
+            weight_decay=float(config.train.weight_decay)
         )
     
     if config.train.optimizer == "SGD":
@@ -41,7 +41,7 @@ def train(config):
             model.parameters(),
             lr=config.train.learning_rate,
             momentum=0.9,
-            weight_decay=config.train.weight_decay
+            weight_decay=float(config.train.weight_decay)
         )
 
     evaluator = Evaluator(model, loss_fn, device=config.device)
