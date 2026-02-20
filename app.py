@@ -1,6 +1,6 @@
 import streamlit as st
 import torch
-from models.NN import NeuralNetwork
+from models.NN.NN import NeuralNetwork
 from configs.utils import get_config
 import cv2
 import numpy as np

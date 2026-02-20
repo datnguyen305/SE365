@@ -1,1 +1,1 @@
-from .classification import train, test
+from .classification_NN import train, test

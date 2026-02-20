@@ -1,1 +1,2 @@
-from .NN import NeuralNetwork
+from .NN.NN import NeuralNetwork
+from .ViT.ViTForClassfication import ViTForClassfication
